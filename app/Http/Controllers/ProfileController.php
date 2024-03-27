@@ -9,6 +9,6 @@ class ProfileController extends Controller
     public function index(){
 
         // some logic
-        return view('profile');
+        return view('terms');
     }
 }
