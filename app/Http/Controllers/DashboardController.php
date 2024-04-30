@@ -14,8 +14,8 @@ class DashboardController extends Controller
         // check if there is a search
         // if there is, check the search value
 
-        if(request()->has('search')) {
-            $ideas = $ideas->where('content', 'like' , '%' . request()->get('search', '') . '%');
+        if (request()->has('search')) {
+            $ideas = $ideas->where('content', 'like', '%' . request()->get('search', '') . '%');
         }
 
         return view(
