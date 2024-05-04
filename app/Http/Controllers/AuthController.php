@@ -59,4 +59,14 @@ class AuthController extends Controller
             'email' => "No matching user found with the provided email and password",
         ]);
     }
+
+    public function logout()
+    {
+        auth()->logout();
+
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()->route('dashboard')->with('success', 'Logged out successfully!');
+    }
 }
