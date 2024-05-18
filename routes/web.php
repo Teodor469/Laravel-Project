@@ -8,6 +8,8 @@ use App\Http\Controllers\IdeaController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
+use function Pest\Laravel\withoutMiddleware;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,32 +21,27 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-Route::get('/', [DashboardController::class , 'index'])->name("dashboard");
+Route::get('/', [DashboardController::class, 'index'])->name("dashboard");
 
-Route::post('/idea', [IdeaController::class, 'store'])->name('idea.create');
+Route::group(['prefix' => 'idea/', 'as' => 'idea.',], function () {
 
-Route::get('/idea/{idea}', [IdeaController::class, 'show'])->name('idea.show');
+    Route::post('', [IdeaController::class, 'store'])->name('create');
 
-Route::get('/idea/{idea}/edit', [IdeaController::class, 'edit'])->name('idea.edit')->middleware('auth');
+    Route::get('/{idea}', [IdeaController::class, 'show'])->name('show');
 
-Route::put('/idea/{idea}', [IdeaController::class, 'update'])->name('idea.update')->middleware('auth');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('/{idea}/edit', [IdeaController::class, 'edit'])->name('edit');
 
-Route::delete('/idea/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy')->middleware('auth');
+        Route::put('/{idea}', [IdeaController::class, 'update'])->name('update');
 
-Route::post('/idea/{idea}/comments', [CommentController::class, 'store'])->name('idea.comments.store')->middleware('auth');
+        Route::delete('/{idea}', [IdeaController::class, 'destroy'])->name('destroy');
 
-Route::get('/register', [AuthController::class , 'register'])->name("register");
-
-Route::post('/register', [AuthController::class , 'store']);
-
-Route::get('/login', [AuthController::class , 'login'])->name('login');
-
-Route::post('/login', [AuthController::class , 'authenticate']);
-
-Route::post('/logout', [AuthController::class , 'logout'])->name('logout');
+        Route::post('/{idea}/comments', [CommentController::class, 'store'])->name('comments.store');
+    });
+});
 
 // Route::get('/terms', [ProfileController::class , 'index']);
 
-Route::get('/terms', function(){
+Route::get('/terms', function () {
     return view('terms');
 });
