@@ -2,7 +2,7 @@
     <form action="{{ route('idea.comments.store', $idea->id) }}" method="POST">
         @csrf
         <div class="mb-3">
-            <textarea name="content" class="fs-6 form-control" rows="1"></textarea>
+            <textarea name="content" class="fs-6 form-control" required rows="1"></textarea>
         </div>
         <div>
             <button type="submit" class="btn btn-primary btn-sm"> Post Comment </button>

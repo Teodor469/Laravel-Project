@@ -25,22 +25,15 @@ Route::get('/', [DashboardController::class, 'index'])->name("dashboard");
 
 Route::group(['prefix' => 'idea/', 'as' => 'idea.',], function () {
 
-    // Route::post('', [IdeaController::class, 'store'])->name('store');
-
-    // Route::get('/{idea}', [IdeaController::class, 'show'])->name('show');
-
     Route::group(['middleware' => ['auth']], function () {
-        // Route::get('/{idea}/edit', [IdeaController::class, 'edit'])->name('edit');
-
-        // Route::put('/{idea}', [IdeaController::class, 'update'])->name('update');
-
-        // Route::delete('/{idea}', [IdeaController::class, 'destroy'])->name('destroy');
 
         Route::post('/{idea}/comments', [CommentController::class, 'store'])->name('comments.store');
     });
 });
 
-Route::resource('idea', IdeaController::class)->except('index', 'create');
+Route::resource('idea', IdeaController::class)->except('index', 'create', 'show')->middleware('auth');
+Route::resource('idea', IdeaController::class)->only('show');
+// Route::resource('idea.comments', IdeaController::class)->only('store')->middleware('auth');
 
 // Route::get('/terms', [ProfileController::class , 'index']);
 
