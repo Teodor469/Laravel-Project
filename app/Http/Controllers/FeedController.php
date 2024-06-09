@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\idea;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class FeedController extends Controller
 {
-    public function index()
+    /**
+     * Handle the incoming request.
+     */
+    public function __invoke(Request $request)
     {
-        $ideas = idea::orderBy('created_at', 'DESC');
+        $followingIDs = auth()->user()->followings()->pluck('user_id');
+
+        $ideas = idea::whereIn('user_id', $followingIDs)->latest();
         // check if there is a search
         // if there is, check the search value
 
