@@ -10,7 +10,7 @@ use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\IdeaLikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 use function Pest\Laravel\withoutMiddleware;
 
@@ -45,6 +45,8 @@ Route::post('ideas/{idea}/like', [IdeaLikeController::class, 'like'])->middlewar
 Route::post('ideas/{idea}/unlike', [IdeaLikeController::class, 'unlike'])->middleware('auth')->name('ideas.unlike');
 
 Route::get('/feed', FeedController::class)->middleware('auth')->name("feed");
+
+Route::get('/admin', [AdminDashboardController::class, 'index'])->name("admin.dashboard")->middleware(['auth', 'admin']);
 
 Route::get('/terms', function () {
     return view('terms');
